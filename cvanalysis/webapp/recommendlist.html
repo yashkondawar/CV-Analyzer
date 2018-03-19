@@ -1,0 +1,196 @@
+<html>
+	<head>
+		<style>
+			.popup {
+				display: none; /* Hidden by default */
+				position: fixed; /* Stay in place */
+				z-index: 1; /* Sit on top */
+				padding-top: 100px; /* Location of the box */
+				left: 0;
+				top: 0;
+				width: 100%; /* Full width */
+				height: 100%; /* Full height */
+				overflow: auto; /* Enable scroll if needed */
+				background-color: rgb(0,0,0); /* Fallback color */
+				background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+			}
+
+			/* Modal Content */
+			.popupData {
+				background-color: #fefefe;
+				margin: auto;
+				padding: 20px;
+				border: 1px solid #888;
+				width: 80%;
+			}
+						
+			/* The Close Button */
+			.close {
+				color: #aaaaaa;
+				float: right;
+				font-size: 28px;
+				font-weight: bold;
+			}
+
+			.close:hover,
+			.close:focus {
+				color: #000;
+				text-decoration: none;
+				cursor: pointer;
+			}
+
+			</style>
+
+		<script>
+
+			/*
+			var jsonData=[{lang:'py', data:[{name:'san','exp':10},{name:'san1','exp':20},{name:'san2','exp':8},{name:'san1','exp':20},{name:'san2','exp':8},{name:'san1','exp':20},{name:'san2','exp':8},{name:'san1','exp':20},{name:'san2','exp':8},{name:'san1','exp':20},{name:'san2','exp':8},{name:'san1','exp':20},{name:'san2','exp':8},{name:'san1','exp':20},{name:'san2','exp':8},{name:'san1','exp':20},{name:'san2','exp':8},{name:'san1','exp':20},{name:'san2','exp':8},{name:'san1','exp':20},{name:'san2','exp':8},{name:'san1','exp':20},{name:'san2','exp':8},{name:'san1','exp':20},{name:'san2','exp':8}]},
+							{lang:'c',data:[{name:'san4','exp':10},{name:'san5','exp':4}]},
+							{lang:'py', data:[{name:'san','exp':10},{name:'san1','exp':20},{name:'san2','exp':8}]},
+							{lang:'py', data:[{name:'san','exp':10},{name:'san1','exp':20},{name:'san2','exp':8}]}];
+			*/
+
+			var jsonData={{jsonData|safe}}
+			var header={{header|safe}}
+			header=header['header']
+			console.log(header)
+/*			var header=['python','c','java'];
+			var jsonData = {
+					requiredNo: 10 ,
+					dataList : [
+						{name:'emp1',exp:[10,3,4]},{name:'emp2',exp:[29,1,2]},
+						{name:'emp3',exp:[10,3,4]},{name:'emp4',exp:[29,1,2]},
+						{name:'emp5',exp:[10,3,4]},{name:'emp6',exp:[29,1,2]},
+						{name:'emp7',exp:[10,3,4]},{name:'emp8',exp:[29,1,2]},
+						{name:'emp9',exp:[10,3,4]},{name:'emp10',exp:[29,1,2]},
+						{name:'emp11',exp:[10,3,4]},{name:'emp12',exp:[29,1,2]},
+						{name:'emp13',exp:[10,3,4]},{name:'emp14',exp:[29,1,2]},
+						{name:'emp15',exp:[10,3,4]},{name:'emp16',exp:[29,1,2]},
+						{name:'emp17',exp:[10,3,4]},{name:'emp18',exp:[29,1,2]}
+					]};
+*/
+			//var jsonData=JSON.parse({{json_data}})
+			function loadSuggestions()
+			{
+
+				var table=document.getElementById('table');
+				table.innerHTML=""
+				var row=table.insertRow(-1);
+				var cell=document.createElement('TH')
+				cell.innerHTML="Name";
+				row.appendChild(cell);
+				for(var i=0;i<header.length;i++){
+					var headerCell=document.createElement('TH');
+					headerCell.innerHTML=header[i]
+					row.appendChild(headerCell);
+				}
+
+
+				for(var i=0;i<jsonData.requiredNo;i++){
+					var row=table.insertRow(-1);
+					var cell=document.createElement('TD');
+					cell.innerHTML=jsonData.dataList[i].name
+					row.appendChild(cell);
+
+					for(var j=0;j<header.length;j++){
+						var cell=document.createElement('TD');
+						cell.innerHTML=jsonData.dataList[i].exp[j]
+						row.appendChild(cell)
+					}
+
+					var cell=document.createElement('TD');
+					cell.innerHTML= '<button id="MyBtn'+(i+1)+'" onclick="show('+i+')">Change</button>'
+					row.appendChild(cell);
+				}
+				/*
+				var listDiv=document.getElementById('suggestions');
+				listDiv.innerHTML="";
+				var i=0;
+				var data=null;
+				data=jsonData.dataList;
+				console.log("Required no ="+jsonData.requiredNo+"\n"+data[i].name+"\nlength"+jsonData.dataList.length);
+				for(i=0; i < jsonData.requiredNo; i++)
+				{				
+					var frag=create('<TR>'+
+						'<TD width="100">'+(i+1)+'</TD>'+
+						'<TD width="250">'+data[i].name+'</TD>'+
+						'<TD width="250">'+data[i].exp+'</TD>'+
+						'<TD width="300"><button id="MyBtn'+(i+1)+'" onclick="show('+i+')">Change</button></TD>'+
+						'</TR><BR>');
+					listDiv.appendChild(frag);
+				}
+				*/
+			}
+			
+			function create(htmlStr) {
+				var frag = document.createDocumentFragment(),
+					temp = document.createElement('TR');
+				temp.innerHTML = htmlStr;
+				while (temp.firstChild) {
+					frag.appendChild(temp.firstChild);
+				  }
+			return frag;
+			}
+			
+			function hide()
+			{
+				document.getElementById("bkgrnd").className = "bkgrnd";
+				document.getElementById("popup").className = "popup";
+			}
+		
+			function show(oldIndex)
+			{
+				document.getElementById('popup').style.display = "block";
+				
+				var popupDiv=document.getElementById('popupData');
+				popupDiv.innerHTML="";
+				var i=0;
+				var data=null;
+				data=jsonData.dataList;
+				
+				for(i=jsonData.requiredNo; i < jsonData.dataList.length; i++)
+				{				
+					var frag=create('<div >'+(i+1)+'&nbsp;'+data[i].name+' &nbsp; '+data[i].exp+
+					' &nbsp; <button id="MyBtn'+(i+1)+'" onclick="replace('+i+','+oldIndex+')">Select</button></div>');
+					popupDiv.appendChild(frag);
+				}
+			}
+			
+			function replace(newIndex,oldIndex)
+			{
+				var temp;
+				temp = jsonData.dataList[oldIndex];
+				jsonData.dataList[oldIndex] = jsonData.dataList[newIndex];
+				jsonData.dataList[newIndex] = temp;
+				document.getElementById('popup').style.display = "none";
+				loadSuggestions();
+				
+			}
+			// When the user clicks anywhere outside of the modal, close it
+				window.onclick = function(event) {
+					if (event.target == document.getElementById('popup')) {
+						document.getElementById('popup').style.display = "none";
+					}
+				}
+			
+		</script>
+		
+	</head>
+	
+	<body onload='loadSuggestions()'>
+		<!--<div id="bkgrnd" class="bkgrnd">-->
+			<div id="suggestions" style="float : left;">
+				
+				<table id="table">
+									
+				</table>
+			</div>	
+			<div name="popup" id = "popup" class="popup">
+				<div id="popupData" class = "popupData">
+					<span class="close">&times;</span>
+				</div>
+			</div>
+		<!--</div>-->
+		
+	</body>
+</html>

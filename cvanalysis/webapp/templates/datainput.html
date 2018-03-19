@@ -1,0 +1,154 @@
+<html>
+	<head>
+	<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
+	<script
+  src="http://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
+	<script type="text/javascript">
+
+			$(document).ready(function(){
+							$('.skill').autocomplete(['python','javascript'])
+
+			})
+
+	</script>
+	<script type='text/javascript'>
+	var counter=2;
+	function createInput(no){
+			var fragment=create("<br><div class='input'>"+
+					"<div class='form-group'>"+
+					"<label for='skill'>Required Skill: </label>"+
+      				"<input type='text' class='form-control skill' id='skill' placeholder='Enter skill' name='skill"+no+"'>"+
+        			"</div>"+
+
+					"<div class='form-group'>"+
+					"<label for='exp1'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Work Experience: </label>"+
+      				"<input type='number' class='form-control' id='exp1' placeholder='Enter Experience' name='exp"+no+"'>"+
+        			"</div>"+
+
+
+			"</div>");
+		return fragment;
+	}
+	function create(htmlStr)
+	{
+    		var frag = document.createDocumentFragment(),
+        	temp = document.createElement('div');
+    		temp.innerHTML = htmlStr;
+    		while (temp.firstChild) {
+       			 frag.appendChild(temp.firstChild);
+     		}
+     		return frag;
+	}
+	function addInput()
+	{
+		//alert("inputtdexrtrt");
+		var ele=document.getElementById('dynamic-ele').appendChild(createInput(counter++));
+	}
+	</script>
+	<script type='text/javascript'>
+	var counter1=2;
+	function createInput1(no){
+			var fragment=create("<br><div class='incog'>"+
+					"<div class='form-group'><div class='form-inline'>"+
+					"<label for='skill'>Skill:&nbsp;&nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>"+
+							"<input type='text' class='form-control' id='skill' placeholder='Enter skill' name='ts"+no+"'>"+
+							"</div></div>"+
+			"</div>");
+		return fragment;
+	}
+	function create(htmlStr)
+	{
+				var frag = document.createDocumentFragment(),
+					temp = document.createElement('div');
+				temp.innerHTML = htmlStr;
+				while (temp.firstChild) {
+						 frag.appendChild(temp.firstChild);
+				}
+				return frag;
+	}
+	function addInput1()
+	{
+		//alert("inputtdexrtrt");
+		var ele=document.getElementById('dynamic-cog').appendChild(createInput1(counter1++));
+	}
+</script>
+		<title>
+		Input page
+	</title>
+	<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+	</head>
+
+	<body>
+
+		<div style="background: #0000ff; padding-top: 30px; padding-bottom: 10px;">
+			<H2><FONT face = "Arial" style=" color: white"><B><center>Project Details</center></B></FONT></H2>
+		</div>
+		<br><br><br>
+		<div class="container">
+			<form method="POST" enctype="multipart/form-data" method='/datainp/'>
+				{%csrf_token%}
+				<input type='hidden' name='fileupload' value=''>
+				<input type='file' name='files' value= "Upload CV" multiple>
+				<input type='submit' value='Upload'>
+			</form>
+
+		  <form class="form-inline" method="POST" action="/datainp/">
+				{%csrf_token%}
+
+			<div class="form-group">
+				<table border = 0>
+					<tr>
+						<td><label for="pr">Project Name: </label></td>
+						<td ><input type="text" class="form-control" id="pr" placeholder="Project Name" name="pr"></td>
+					</tr>
+
+					<tr>
+						<td><label for="tp">People Required with following Skillset: &nbsp; &nbsp; &nbsp; &nbsp;	</label></td>
+							<td><input type="number" class="form-control" id="tp" placeholder="Total no of people" name="tp"></td>
+					</tr>
+			</table>
+       		</div>
+					<hr>
+								<h2><p>Mandatory Requirements</p></h2>
+			<div id='dynamic-ele'>
+			<div class='input'>
+					<div class='form-inline'>
+					<div class="form-group">
+					<label for='skill'>Required Skill:</label>
+        			<input type="text" class="form-control" id="skill" placeholder="Skill" name="skill1">
+        			</div>
+					<div class="form-group">
+
+					<label for="exp1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Work Experience:</label>
+      			<input type="number" class="form-control" id="exp1" placeholder="Enter Experience" name="exp1"><br>
+        		</div>
+						</div>
+			</div>
+			</div>
+		<br>
+		&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type='button' value='Add+' onclick="addInput()"><br>
+<hr>
+		<h2><p>Desired Skills</p></h2>
+		<div id='dynamic-cog'>
+			<div class='incog'>
+				<div class='form-inline'>
+						<div class="form-group">
+					<label for="sk">Skill:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
+	   				<input type="text" class="form-control" id="sk" placeholder="Enter skill" name="ts1">
+					</div></div>
+</div></div><br>
+					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type='button' value='Add+' onclick="addInput1()"><br>
+		<center> <button type="submit" onclick="check(this.form)"  class="btn btn-primary">Submit</button></center>
+    	</div>
+			</div>
+		</form>
+	</body>
+</html>

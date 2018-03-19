@@ -1,0 +1,99 @@
+<html>
+<head>
+	<title>Final Page</title>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<script>
+    /*var jsonData=[	{ skills : ["py","cpp","c"] , name : ["e8","e3","e2"]  } ,
+    				{ skills : ["html","css"] , name : ["e1","e7","e3","e4"]  }
+    			]
+    */
+		var jsonData={{jsonData|safe}}
+		       //var jsonData=JSON.parse({{json_data}})
+            function create(htmlStr){
+    		var frag = document.createDocumentFragment(),
+        	temp = document.createElement('div');
+    		temp.innerHTML = htmlStr;
+    		while (temp.firstChild) {
+       			 frag.appendChild(temp.firstChild);
+     		}
+     		return frag;
+	}
+
+	function loadSuggestions()
+			{
+				var listDiv=document.getElementById('suggestions');
+				listDiv.innerHTML="";
+				var i=0;
+				var data=null;
+				data=jsonData.dataList;
+				console.log("length : "+jsonData.length);
+
+				for (var j=0; j < jsonData.length; j++)
+				 {
+				 	var skillString=""
+					var data = jsonData[j];
+					var skills = data.skills;
+					var names = data.name;
+					console.log("skills : "+skills);
+					console.log("names : "+names);
+
+					for(i=0; i < skills.length; i++)
+					{
+						skillString = skillString + " " +skills[i];
+					}
+						var frag=create('<div style="align : center; width : 1000px; color : white; background : #4286f4; margin-left:15%; margin-top:5%; font-size : 25px; padding : 10px; padding-left : 20px ; font-family : serif; border-radius : 20px;">'+skillString+'</div>');
+						listDiv.appendChild(frag);
+						console.log(skillString);
+
+					for(i=0; i < names.length; i++)
+					{
+						var frag=create('<center><div style="margin-top: 2%; display : list-item ; padding-left : 30%; text-align : left; font-family : serif; font-size : 25px;"><li style = "list-style-type: disc;">'+names[i]+'<hr> </div></center>');
+						listDiv.appendChild(frag);
+					}
+
+						console.log(skillString);
+				}
+			}
+
+			function create(htmlStr) {
+				var frag = document.createDocumentFragment(),
+					temp = document.createElement('div');
+				temp.innerHTML = htmlStr;
+				while (temp.firstChild) {
+					frag.appendChild(temp.firstChild);
+				  }
+			return frag;
+			}
+
+
+</script>
+</head>
+
+	<body onload='loadSuggestions()'>
+		<!--<div id="bkgrnd" class="bkgrnd">-->
+		<div style="background: #0000ff; padding-top: 30px; padding-bottom: 10px;">
+			<H2><FONT face = "Arial" style=" color: white"><B><center>FINAL PROJECT TEAM</center></B></FONT></H2>
+		</div>
+
+			<div id="suggestions" style="float : left;">
+
+				<table id="table">
+
+				</table>
+			</div>
+			<div name="popup" id = "popup" class="popup">
+				<div id="popupData" class = "popupData">
+					<span class="close">&times;</span>
+				</div>
+			</div>
+		<!--</div>-->
+
+	</body>
+</html>

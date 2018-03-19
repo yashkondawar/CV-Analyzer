@@ -1,0 +1,54 @@
+<html>
+<head>
+	<title>Final Page</title>
+
+
+<script>
+	var header=['python','c','java'];
+    var jsonData=[{name:'myname',skills:[10,3,4]},{name:'e2',skills:[29,1,2]}]             
+            //var jsonData=JSON.parse({{json_data}})
+            function create(htmlStr){
+    		var frag = document.createDocumentFragment(),
+        	temp = document.createElement('div');
+    		temp.innerHTML = htmlStr;
+    		while (temp.firstChild) {
+       			 frag.appendChild(temp.firstChild);
+     		}
+     		return frag;
+	}
+	
+
+	function fillTable(){
+		var table=document.getElementById('table');
+		var row=table.insertRow(-1);
+		var cell=document.createElement('TH')
+		cell.innerHTML='Name';
+		row.appendChild(cell);
+		for(var i=0;i<header.length;i++){
+			var headerCell=document.createElement('TH');
+			headerCell.innerHTML=header[i]
+			row.appendChild(headerCell);
+		}
+
+		for(var i=0;i<jsonData.length;i++){
+			var row=table.insertRow(-1);
+			var cell=document.createElement('TD');
+			cell.innerHTML=jsonData[i].name
+			row.appendChild(cell);
+
+			for(var j=0;j<header.length;j++){
+				var cell=document.createElement('TD');
+				cell.innerHTML=jsonData[i].skills[j]
+				row.appendChild(cell)
+			}
+		}
+	}
+</script>
+</head>
+<body onload='fillTable()'>
+	<div>
+		<table id='table'>
+		</table>
+	</div>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<html>
+	<head>
+		<style>
+			.popup {
+				display: none; /* Hidden by default */
+				position: fixed; /* Stay in place */
+				z-index: 1; /* Sit on top */
+				padding-top: 100px; /* Location of the box */
+				left: 0;
+				top: 0;
+				width: 100%; /* Full width */
+				height: 100%; /* Full height */
+				overflow: auto; /* Enable scroll if needed */
+				background-color: rgb(0,0,0); /* Fallback color */
+				background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+			}
+
+			/* Modal Content */
+			.popupData {
+				background-color: #fefefe;
+				margin: auto;
+				padding: 20px;
+				border: 1px solid #888;
+				width: 80%;
+			}
+
+			/* The Close Button */
+			.close {
+				color: #aaaaaa;
+				float: right;
+				font-size: 28px;
+				font-weight: bold;
+			}
+
+			.close:hover,
+			.close:focus {
+				color: #000;
+				text-decoration: none;
+				cursor: pointer;
+			}
+
+			</style>
+		<script>
+
+			var header={{header|safe}};
+			var jsonData={{jsonData|safe}};
+			function loadSuggestions()
+			{
+
+				var table=document.getElementById('table');
+				table.innerHTML=""
+				var row=table.insertRow(-1);
+				var cell=document.createElement('TH')
+				cell.innerHTML="Name";
+				row.appendChild(cell);
+				for(var i=0;i<header.length;i++){
+					var headerCell=document.createElement('TH');
+					headerCell.innerHTML="Experience in "+header[i];
+					row.appendChild(headerCell);
+				}
+
+
+				for(var i=0;i<jsonData.requiredNo;i++){
+					var row=table.insertRow(-1);
+					var cell=document.createElement('TD');
+					cell.innerHTML=jsonData.dataList[i].name
+					row.appendChild(cell);
+
+					for(var j=0;j<header.length;j++){
+						var cell=document.createElement('TD');
+						cell.innerHTML=jsonData.dataList[i].exp[j]
+						row.appendChild(cell)
+					}
+
+					var cell=document.createElement('TD');
+					cell.innerHTML= '<button id="MyBtn'+(i+1)+'" onclick="show('+i+')">Change</button>'
+					row.appendChild(cell);
+				}
+			}
+
+			function create(htmlStr) {
+				var frag = document.createDocumentFragment(),
+					temp = document.createElement('TR');
+				temp.innerHTML = htmlStr;
+				while (temp.firstChild) {
+					frag.appendChild(temp.firstChild);
+				  }
+			return frag;
+			}
+
+			function hide()
+			{
+				document.getElementById("bkgrnd").className = "bkgrnd";
+				document.getElementById("popup").className = "popup";
+			}
+
+			function show(oldIndex)
+			{
+				document.getElementById('popup').style.display = "block";
+
+				var popupDiv=document.getElementById('popupData');
+				popupDiv.innerHTML="";
+				var i=0;
+				var data=null;
+				data=jsonData.dataList;
+
+				for(i=jsonData.requiredNo; i < jsonData.dataList.length; i++)
+				{
+					var j=i+1;
+					var frag=create('<div>&nbsp;'+data[i].name+' &nbsp; '+data[i].exp+
+					' &nbsp; <button id="MyBtn'+(i+1)+'" onclick="replace('+i+','+oldIndex+')">Select</button></div>');
+					popupDiv.appendChild(frag);
+				}
+			}
+
+			function replace(newIndex,oldIndex)
+			{
+				var temp1,temp2;
+
+				temp1 = jsonData.dataList[newIndex];
+				jsonData.dataList[newIndex] = jsonData.dataList[oldIndex];
+				jsonData.dataList[oldIndex]=temp1;
+
+				for (var i = oldIndex; i < (jsonData.requiredNo - 1); i++) {
+					temp2 = jsonData.dataList[i];
+					jsonData.dataList[i]=jsonData.dataList[i+1];
+					jsonData.dataList[i+1]=temp2;
+				}
+
+				document.getElementById('popup').style.display = "none";
+				loadSuggestions();
+
+			}
+			// When the user clicks anywhere outside of the modal, close it
+				window.onclick = function(event) {
+					if (event.target == document.getElementById('popup')) {
+						document.getElementById('popup').style.display = "none";
+					}
+				}
+		function getTableData(){
+			var names=[]
+			var langs=[]
+			var table=document.getElementById('table');
+			var rows=table.rows
+			for(var i=1;i<rows.length;i++){
+				names.push(rows[i].cells[0].innerHTML)
+			}
+			for(var i=1;i<table.rows[0].cells.length;i++){
+				langs.push(table.rows[0].cells[i].innerHTML)
+			}
+			console.log(names);
+			console.log(langs)
+			data={'skills':langs,'name':names}
+			string=JSON.stringify(data);
+			inp=document.getElementById('data')
+			inp.value=string
+		}
+		function change_value(){
+			getTableData()
+			document.getElementById('which').value='final';
+		}
+		</script>
+
+	</head>
+
+	<body onload='loadSuggestions()'>
+		<!--<div id="bkgrnd" class="bkgrnd">-->
+		<div style="background: #0000ff; padding-top: 30px; padding-bottom: 10px;">
+			<H2><FONT face = "Arial" style=" color: white"><B><center>Recommendations</center></B></FONT></H2>
+		</div>
+		<br><br><br>
+			<div id="suggestions" style="float : left; width : 100%">
+
+				<table id="table" cellpadding="20" style="font-size : 25px;" align = "center">
+
+				</table>
+			</div>
+
+
+			<div name="popup" id = "popup" class="popup">
+				<div id="popupData" class = "popupData">
+					<span class="close">&times;</span>
+				</div>
+			</div>
+		<!--</div>--><br><br><br>
+			<div style="margin-top : 70px">
+				<form action='/recommend/' method='POST' >
+					{%csrf_token%}
+					<BR>
+						<center>
+				<input type='hidden' name='data' id='data'>
+				<input type='hidden' name='which' value="new" id='which'>
+				<input type='submit' name='again' onclick="getTableData()" value='New Request' class="btn btn-primary"/>
+				<input type='submit' name='finalize' onclick="change_value()" value='Finalize' class="btn btn-primary"/>
+			</center>
+			</form>
+			</div>
+	</body>
+</html>
